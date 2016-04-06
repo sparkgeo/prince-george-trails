@@ -1,0 +1,92 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+@font-face {
+    font-family: 'hartingplain';
+    src: url('Harting_plain-webfont.eot');
+    src: url('Harting_plain-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Harting_plain-webfont.woff') format('woff'),
+         url('Harting_plain-webfont.ttf') format('truetype'),
+         url('Harting_plain-webfont.svg#hartingplain') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+   font-family: hartingplain;
+   padding-bottom: 20px;
+}
+
+.bodyTxt{
+    color: #EDEEED;
+}
+
+.footerTxt{
+    color: #EDEEED;
+}
+
+.trailHead{
+    background: rgba(255,255,255,0);
+}
+
+.trailContent{
+   color: rgba(255,0,0,0.4);
+}
+
+.trailBody{
+    background-image: url("../img/IMG_3862_f.jpg");
+    background-repeat: no-repeat;
+    background-color: #15191D;
+}
+
+.footerTxt a{
+    color: #EDEEED;
+}
+
+.spk{
+    font-family:'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+}
+
+.spkArrow{
+    color: #FB8B0C;
+}
+
+.colors{
+    background: rgba(255,255,255,0.2);
+}
+
+.blue{
+    font-weight: bold;
+    color: #3C80BA;
+}
+
+.green{
+    font-weight: bold;
+    color: #45AA2F;
+}
+
+.black{
+    font-weight: bold;
+    color: #2C3229;
+}
+
+.brown{
+    font-weight: bold;
+    color: #9B6019;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
