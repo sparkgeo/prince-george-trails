@@ -9,7 +9,8 @@
         <title>Prince George, BC Trails</title>
         <meta name="description" content="A collection of trails maps for the Prince George, BC area - Sparkgeo">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="shortcut icon" href="http://www.sparkgeo.com/static/img/thumbnail.png">
+        <link rel="apple-touch-icon" href="http://www.sparkgeo.com/static/img/thumbnail.png">
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
@@ -22,32 +23,49 @@
           <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
       <div class="jumbotron trailHead ">
-        <div class=" container">
+        <div class="container">
           <h1>Because, trails</h1>
-          <p class="lead">We're mapping the trails around Prince George BC, so you can focus on ripping it. </p>
+          <p class="lead"><a href="http://www.sparkgeo.com">We're</a> mapping the trails around Prince George BC, so you can focus on ripping it. </p>
           <p class="lead">But trails are dangerous, so pack the right gear, make good choices & go with a friend.</p>
         </div>
       </div>
 
       <div class="container trailContent">
-        <!-- Example row of columns -->
         <div class="row">
           <div class="container colors">
+            <h2 class="green">Zones</h2>
             <div class="col-md-6">
-              <a href="http://snippets.sparkgeo.com/otway" role="button">
-                <h2>Otway Full Screen &raquo;</h2>
-                <iframe src="http://snippets.sparkgeo.com/otway" width="100%" height="400px" frameborder="None"></iframe>
+              <a href="/otway" role="button">
+                <h2>Otway &raquo;</h2>
+                <iframe src="/otway" width="100%" height="400px" frameborder="None"></iframe>
               </a>
             </div>
             <div class="col-md-6">
-              <a href="http://snippets.sparkgeo.com/pidherny" role="button">
-                <h2>Pidherny Full Screen &raquo;</h2>
-                <iframe src="http://snippets.sparkgeo.com/pidherny" width="100%" height="400px" frameborder="None"></iframe>
+              <a href="/pidherny" role="button">
+                <h2>Pidherny &raquo;</h2>
+                <iframe src="/pidherny" width="100%" height="400px" frameborder="None"></iframe>
               </a>
             </div>
           </div>
-        </div>
-      </div>
+        </div><!-- row -->
+        <div class="row">
+          <div class="container colors">
+            <h2 class="green">Races</h2>
+            <div class="col-md-6">
+              <a href="/otway?race=beat-the-bugs" role="button">
+                <h2>Beat the Bugs &raquo;</h2>
+                <iframe src="/otway?race=beat-the-bugs" width="100%" height="400px" frameborder="None"></iframe>
+              </a>
+            </div>
+            <div class="col-md-6">
+              <a href="/pidherny?race=rustchucker" role="button">
+                <h2>RustChucker &raquo;</h2>
+                <iframe src="/pidherny?race=rustchucker" width="100%" height="400px" frameborder="None"></iframe>
+              </a>
+            </div>
+          </div>
+        </div><!-- row -->
+      </div><!-- content -->
 
       <div class="container colors">
         <h2 class="bodyTxt">Trail Colors</h2>

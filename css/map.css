@@ -1,0 +1,25 @@
+html, body, #map {height: 100%; padding: 0; margin: 0;}
+li i{font-size: 16px;}
+
+#layer_selector {position: absolute; top: 10px; right: 10px; padding: 0;}
+#layer_selector ul {padding: 0; margin: 0; list-style-type: none;}
+#layer_selector li {border-bottom: 1px solid #999; padding: 10px 20px; font-family: "Helvetica", Arial; font-size: 13px; color: #444; cursor: auto;}
+#layer_selector li i {pointer-events: none;}
+#layer_selector li:hover {background-color: #F0F0F0; cursor: pointer;}
+#layer_selector li.selected {background-color: #EEE;}
+#layer_selector li.drop {text-indent: 20px;}
+
+
+.title{display: inline; pointer-events: none; }
+
+
+
+.button {position: relative; font-family: "Helvetica", Arial; font-size: 10px; color: #444; border: none; background-color: white; }
+.map-icon-label{font-size: 13px;}
+
+@media (max-width: 40em) {
+    #layer_selector {text-align: center; margin: auto}
+    .title {display: none;}
+    .spk{bottom: 25px;}
+    #layer_selector li.drop {text-indent: 0px;}
+}

@@ -1,221 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Otway Trail Map</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <link rel="shortcut icon" href="http://www.sparkgeo.com/static/img/thumbnail.png">
-    <link rel="stylesheet" type="text/css" href="css/map-icons.css" />
-    <style>
-      html, body, #map {height: 100%; padding: 0; margin: 0;}
-      #layer_selector {position: absolute; top: 10px; right: 10px; padding: 0;}
-      #layer_selector ul {padding: 0; margin: 0; list-style-type: none;}
-      #layer_selector li {border-bottom: 1px solid #999; padding: 10px 20px; font-family: "Helvetica", Arial; font-size: 20px; color: #444; cursor: auto;}
-      #layer_selector li i {pointer-events: none;}
-      .title{display: inline; pointer-events: none; font-size: 13px;}
-      #layer_selector li:hover {background-color: #F0F0F0; cursor: pointer;}
-      #layer_selector li.selected {background-color: #EEE;}
-      @media (max-width: 40em) {
-	      .title {display: none;}
-	      .spk{bottom: 25px;}
-	  }
-    </style>
-    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.14/themes/css/cartodb.css" />
-    <link rel="stylesheet" href="locate.min.css" />
+	  <title>Otway Trail Map</title>
+	  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	  <link rel="shortcut icon" href="http://www.sparkgeo.com/static/img/thumbnail.png">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="http://libs.cartocdn.com/cartodb.js/v3/3.14/themes/css/cartodb.css" />
+	  <link rel="stylesheet" type="text/css" href="../css/map-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/map.css" />
+    <link rel="stylesheet" type="text/css" href="../css/locate.min.css" />
   </head>
   <body>
     <div id="map"></div>
     <div id="layer_selector" class="cartodb-infobox">
-      <ul>
-	    <li id="singletrack" class="selected"><i class="map-icon-bicycling"></i> <span class="title">Single Track</span></li>
-        <li id="nordic"><i class="map-icon-cross-country-skiing"></i> <span class="title">Nordic Skiing</span></li>
-        <li id="snowshoe"><i class="map-icon-snow-shoeing"></i> <span class="title">Snow Shoeing</span></li>
+      <ul id="layer-list" class="togglelist">
       </ul>
+      <div style="text-align:center; margin:auto;">
+        <button class="button"><i class="fa fa-chevron-up" aria-hidden="true"></i><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+      </div>
     </div>
-    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.14/cartodb.js"></script>
-    <script src="//cdn.maptiks.com/maptiks-leaflet.min.js"></script>
-    <script src="locate.min.js"></script>
-    <script>
-	maptiks.trackcode='67f8ce06-141e-4352-b619-1d8fd4537368';
-	var skiPlacesCartoCSS = "Map {buffer-size:140;}#otway_trail_places{marker-fill-opacity: 1;marker-line-color: #FFFFFF;marker-line-width: 2;marker-line-opacity: 1;marker-placement:point;marker-type:ellipse;marker-allow-overlap: true;}#otway_trail_places[descriptio='Junction']{marker-fill: #575757;marker-width: 12;}#otway_trail_places[descriptio='Trail Connection']{marker-file: url(http://com.cartodb.users-assets.production.s3.amazonaws.com/maki-icons/park-18.svg);marker-width: 35;} #otway_trail_places::labels{text-name: [name];text-face-name: 'Open Sans Bold Italic';text-size: 14;text-label-position-tolerance: 10;text-fill: #FFFFFF;text-halo-fill: #575757;text-halo-radius: 2;text-dy: -10;text-allow-overlap: true;text-placement: point;text-placement-type: simple;}#otway_trail_places[descriptio='Trail Connection']::labels{text-dy: 20;}";
-	var map;
-	var DEFAULT_MODE = 'singletrack';
-	  
-    function main() {
-		//mapbox base layers
-        var mapboxAccessToken = 'pk.eyJ1Ijoid2lsbGNhZGVsbCIsImEiOiJKbjZwckU0In0.ET9f2IdpUPpsmZsOc_0T-w';
-		var summerTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v4/willcadell.20c8a20a/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-			attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
-			zIndex:0,
-			maptiks_id: "Summer Mapbox Tiles"
-      	});
-		var winterTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v4/willcadell.43a18a09/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-			attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
-			zIndex:0,
-			maptiks_id: "Winter Mapbox Tiles"
-      	});
-	    
-      	//define starting season
-	    if (DEFAULT_MODE =='singletrack'){
-		     var initialLayer = summerTiles
-	    } else {
-		     var initialLayer = winterTiles
-	    }
-
-	    // build simple map
-	    var map = new L.Map('map', {
-          center: [53.966, -122.88],
-          zoom: 14,
-          maxZoom: 19,
-          minZoom: 12,
-          layers: initialLayer,
-          maptiks_id: "Otway Trail Map",
-          attributionControl: false,
-        });
-		
-		//from cartodb - SELECT st_astext(st_envelope(st_union(the_geom))) FROM xcskitrails
-		
-		map.fitBounds([
-			[53.9727081860345,-122.859095858743],
-			[53.9576281860941,-122.899495685641]
-		]);
-
-		// cartodb data 
-        var trails = cartodb.createLayer(map, 'https://sparkgeo.cartodb.com/api/v2/viz/5d02bb8c-0a03-11e5-a7d9-0e018d66dc29/viz.json',{
-	        mobile_layout: false,
-	        legends: false,
-	        cartodb_logo: false,
-	        zIndex: 999,
-	        maptiks_id: "CartoDB Data"
-        }).addTo(map)
-        .done(function(layers) {
-			layers.setInteraction(true);
-	    	var skiPlaces = {
-		    	sql: "SELECT * FROM otway_trail_places WHERE type = 'all'",
-		    	cartocss: skiPlacesCartoCSS,
-	    	};
-						
-	    	layers.createSubLayer(skiPlaces)
-
-			if (DEFAULT_MODE =='singletrack'){
-				singletrackLayers(layers)
-	    	} else {
-				nordiclayers(layers)
-	    	}
-	    	createSelector(layers);
-        })
-        .error(function(err) {
-          console.log(err);
-        });
-
-		//geolocation
-      	new L.control.locate({
-	      	icon: 'map-icon-crosshairs', 
-	      	locateOptions: {
-	      		maxZoom: 16,
-	      	},
-	      	keepCurrentZoomLevel: false,
-      		strings: {
-	  			title: "Locate Me",  // title of the locate control
-	  			popup: "You are within {distance} {unit} from this point",  // text to appear if user clicks on circle
-	  			outsideMapBoundsMsg: "You seem located outside the boundaries of the map" // default message for onLocationOutsideMapBounds
-    		}
-    	}).addTo(map);
-
-		//branding
-    	var logo= L.control({
-			position : 'bottomright'
-		});
-		logo.onAdd = function(map) {
-			this._div = L.DomUtil.create('div', 'spk');
-			var img_log = "<div class='spk'><img src='http://images.sparkgeo.com/poweredby_transparent_100w.png?src=otway'></img></div>";
-			this._div.innerHTML = img_log;
-			return this._div;
-		};
-		logo.addTo(map);
- 
- 		//L.control.attribution(
-		var warning = L.control.attribution({position:'bottomleft',prefix:"Warning: Multi use trails are used at your own risk! Maps are provided for your education & safety"});
-    	warning.addTo(map);
-    	
-		var selectedLayer;
-		
-
-		
-		//custom layer selector
-		function createSelector(layers) {
-        	var $options = $('#layer_selector li');
-			$options.on('click', function(e) {
-				$options.removeClass('selected')
-				var $li = $(e.target);
-				$li.addClass('selected')
-				var layer = $li.attr('id');
-				if(selectedLayer != layer ){
-					if (layer == 'nordic'){
-						nordicLayers(layers)
-						if (map.hasLayer(summerTiles)){
-							map.removeLayer(summerTiles)
-							map.addLayer(winterTiles)
-						}
-            		}
-					else if (layer == 'singletrack') {
-						singletrackLayers(layers)
-						if (map.hasLayer(winterTiles)){
-							map.removeLayer(winterTiles)
-							map.addLayer(summerTiles)
-						}
-            		}
-            		else if (layer == 'snowshoe') {
-						snowshoeLayers(layers)
-						if (map.hasLayer(summerTiles)){
-							map.removeLayer(summerTiles)
-							map.addLayer(winterTiles)
-						}
-            		}
-          		}
-        	});
-      	}
-
-	  	function nordicLayers(layers){
-			layers.getSubLayer(0).hide() // ski background trails
-			layers.getSubLayer(1).hide() // bike trails
-			layers.getSubLayer(2).hide() // otway places
-			layers.getSubLayer(3).show() // ski trails
-			layers.getSubLayer(4).hide() // snow shoe trails
-			layers.getSubLayer(5).show() // added layer - will always be last
-	    }
-
-		function singletrackLayers(layers){
-			layers.getSubLayer(0).show()
-			layers.getSubLayer(1).show()
-			layers.getSubLayer(2).show()
-			layers.getSubLayer(3).hide()
-			layers.getSubLayer(4).hide() // snow shoe trails
-			layers.getSubLayer(5).hide()
-		}
-
-		function snowshoeLayers(layers){
-			layers.getSubLayer(0).show()
-			layers.getSubLayer(1).hide()
-			layers.getSubLayer(2).hide()
-			layers.getSubLayer(3).hide()
-			layers.getSubLayer(4).show() // snow shoe trails
-			layers.getSubLayer(5).show()
-	    }
-	}
-    window.onload = main;
-
-    </script>
+    <script type="text/javascript" src="http://libs.cartocdn.com/cartodb.js/v3/3.14/cartodb.js"></script>
+    <script type="text/javascript" src="//cdn.maptiks.com/maptiks-leaflet.min.js"></script>
+    <script type="text/javascript" src="../js/locate.min.js"></script>
+    <script type="text/javascript" src="otway.js"></script>
     <script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-18772405-2']);
-	_gaq.push(['_trackPageview']);
-
-	(function() {
-    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  	})();
-	</script>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-18772405-2']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
   </body>
 </html>
