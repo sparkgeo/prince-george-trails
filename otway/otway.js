@@ -46,7 +46,7 @@ function snowshoeLayers(layers) {
 
 function main() {
     "use strict";
-    var map, sql, mapboxAccessToken, trails, summerTiles, winterTiles, selectedLayer, longStyle, shortStyle, initialLayer, longData, shortData, logo, skiPlaces;
+    var map, sql, mapboxAccessToken, trails, summerTiles, winterTiles, selectedLayer, longStyle, shortStyle, initialLayer, hotLong, hotShort, longData, shortData, logo, skiPlaces;
 
     longStyle = {"color": "#F11810", "weight": 5, "opacity": 0.65};
     shortStyle = {"color": "#FFE403", "weight": 5, "opacity": 0.65};
@@ -102,6 +102,22 @@ function main() {
             console.log("errors:" + errors);
         });
 
+    sql.execute("SELECT * FROM hotdaylong")
+        .done(function (data) {
+            hotLong = L.geoJson(data, {style: longStyle});
+        })
+        .error(function (errors) {
+            console.log("errors:" + errors);
+        });
+
+    sql.execute("SELECT * FROM hotday")
+        .done(function (data) {
+            hotShort = L.geoJson(data, {style: shortStyle});
+        })
+        .error(function (errors) {
+            console.log("errors:" + errors);
+        });
+
     map.fitBounds([[53.9727081860345, -122.859095858743], [53.9576281860941, -122.899495685641]]);
 
     // cartodb data
@@ -138,6 +154,36 @@ function main() {
                     map.removeLayer(shortData);
                 } else {
                     map.addLayer(shortData);
+                }
+            });
+            layers.setInteraction(true);
+            singletrackLayers(layers);
+
+        } else if (getParamByName('race') === 'hot-day') {
+            MODE = 'race';
+
+            $("#layer-list").append(
+                "<li class='selected' id='short'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Short </li>" +
+                "<li id='long'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Long </li>"
+            );
+
+            map.addLayer(hotShort);
+
+            $('#long').click(function () {
+                $(this).toggleClass('selected');
+                if (map.hasLayer(hotLong)) {
+                    map.removeLayer(hotLong);
+                } else {
+                    map.addLayer(hotLong);
+                }
+            });
+
+            $('#short').click(function () {
+                $(this).toggleClass('selected');
+                if (map.hasLayer(hotShort)) {
+                    map.removeLayer(hotShort);
+                } else {
+                    map.addLayer(hotShort);
                 }
             });
             layers.setInteraction(true);
