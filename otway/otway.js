@@ -163,8 +163,8 @@ function main() {
             MODE = 'race';
 
             $("#layer-list").append(
-                "<li class='selected' id='short'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Short </li>" +
-                "<li id='long'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Long </li>"
+                "<li class='selected' id='short'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Novice </li>" +
+                "<li id='long'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Expert </li>"
             );
 
             map.addLayer(hotShort);
