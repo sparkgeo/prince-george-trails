@@ -15,7 +15,7 @@ function getParamByName(name) {
 
 function main() {
     "use strict";
-    var raceData, trails, raceStyle, sql, mapboxAccessToken, baseTiles, satTiles, baseMaps, baseMapLive, baseActions, logo;
+    var raceData, trails, raceStyle, sql, mapboxAccessToken, baseTiles, satTiles, baseMaps, baseMapLive, baseActions, logo, bigSink;
 
     //mapbox base layers
     mapboxAccessToken = 'pk.eyJ1Ijoid2lsbGNhZGVsbCIsImEiOiJKbjZwckU0In0.ET9f2IdpUPpsmZsOc_0T-w';
@@ -45,8 +45,6 @@ function main() {
         maptiks_id: "Pidherny Single Track",
         attributionControl: false
     });
-
-
 
     // cartodb trail data
     trails = cartodb.createLayer(map, 'https://sparkgeo.cartodb.com/api/v2/viz/6cbc03be-fdad-11e5-8a85-0e674067d321/viz.json', {
@@ -81,6 +79,31 @@ function main() {
                     map.removeLayer(raceData);
                 } else {
                     map.addLayer(raceData);
+                }
+            });
+        } else if (getParamByName('race') === 'big-sink') {
+
+            raceStyle = {"color": "#F11810", "weight": 5, "opacity": 0.65};
+
+            sql = new cartodb.SQL({user: 'sparkgeo', format: 'geojson'});
+
+            sql.execute("SELECT * FROM big_sink_enduro")
+                .done(function (data) {
+                    bigSink = L.geoJson(data, {style: raceStyle});
+                    map.addLayer(bigSink);
+                })
+                .error(function (errors) {
+                    console.log("errors:" + errors);
+                });
+
+            $("#layer-list").append("<li id='raceCourse' class='selected layer-menu layer'><i class='map-icon-bicycling'></i><span class='title'> The Big Sink Smasher Pig Thrasher!</span></li>");
+            $('#raceCourse').click(function (e) {
+                $(this).toggleClass('selected');
+                var elem = e.target.id ? e.target : e.target.parentNode;
+                if (map.hasLayer(bigSink)) {
+                    map.removeLayer(bigSink);
+                } else {
+                    map.addLayer(bigSink);
                 }
             });
         }

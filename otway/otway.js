@@ -46,7 +46,7 @@ function snowshoeLayers(layers) {
 
 function main() {
     "use strict";
-    var map, sql, mapboxAccessToken, trails, summerTiles, winterTiles, selectedLayer, longStyle, shortStyle, initialLayer, hotLong, hotShort, longData, shortData, logo, skiPlaces;
+    var map, sql, mapboxAccessToken, trails, summerTiles, winterTiles, selectedLayer, longStyle, shortStyle, initialLayer, hotEnduro, hotLong, hotShort, longData, shortData, logo, skiPlaces;
 
     longStyle = {"color": "#F11810", "weight": 5, "opacity": 0.65};
     shortStyle = {"color": "#FFE403", "weight": 5, "opacity": 0.65};
@@ -118,6 +118,15 @@ function main() {
             console.log("errors:" + errors);
         });
 
+    sql.execute("SELECT * FROM hot_day_enduro")
+        .done(function (data) {
+            hotEnduro = L.geoJson(data, {style: longStyle});
+        })
+        .error(function (errors) {
+            console.log("errors:" + errors);
+        });
+
+
     map.fitBounds([[53.9727081860345, -122.859095858743], [53.9576281860941, -122.899495685641]]);
 
     // cartodb data
@@ -163,8 +172,8 @@ function main() {
             MODE = 'race';
 
             $("#layer-list").append(
-                "<li class='selected' id='short'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Novice </li>" +
-                "<li id='long'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Expert </li>"
+                "<li class='selected' id='short'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Novice</li>" +
+                "<li id='long'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Expert</li>"
             );
 
             map.addLayer(hotShort);
@@ -189,8 +198,31 @@ function main() {
             layers.setInteraction(true);
             singletrackLayers(layers);
 
+        } else if (getParamByName('race') === 'hot-day-enduro') {
+            MODE = 'race';
+
+            $("#layer-list").append(
+                "<li class='selected' id='enduro'><i class='map-icon-bicycling' aria-hidden='true'></i> <span class='title'>Hot Day</span> Enduro</li>"
+            );
+
+
+
+            $('#enduro').click(function () {
+                $(this).toggleClass('selected');
+                if (map.hasLayer(hotEnduro)) {
+                    map.removeLayer(hotEnduro);
+                } else {
+                    map.addLayer(hotEnduro);
+                }
+            });
+
+            map.addLayer(hotEnduro);
+
+            layers.setInteraction(true);
+            singletrackLayers(layers);
+
         } else {
-                
+
             $("#layer-list").append(
                 "<li id='singletrack' class='selected'><i class='map-icon-bicycling'></i> <span class='title'>Single Track</span></li>" +
                 "<li id='nordic'><i class='map-icon-cross-country-skiing'></i> <span class='title'>Nordic Skiing</span></li>" +
