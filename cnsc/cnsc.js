@@ -140,15 +140,15 @@ function main() {
     }).addTo(map);
 
     //branding
-    logo = L.control({position: 'bottomright'});
-
-    logo.onAdd = function (map) {
-        this._div = L.DomUtil.create('div', 'spk');
-        var img_log = "<div class='spk'><img src='http://images.sparkgeo.com/poweredby_transparent_100w.png?src=trails'></img></div>";
-        this._div.innerHTML = img_log;
-        return this._div;
-    };
-    logo.addTo(map);
+    // logo = L.control({position: 'bottomright'});
+    //
+    // logo.onAdd = function (map) {
+    //     this._div = L.DomUtil.create('div', 'spk');
+    //     var img_log = "<div class='spk'><img src='http://images.sparkgeo.com/poweredby_transparent_100w.png?src=trails'></img></div>";
+    //     this._div.innerHTML = img_log;
+    //     return this._div;
+    // };
+    // logo.addTo(map);
 
     L.control.attribution({
         position: 'bottomleft',
