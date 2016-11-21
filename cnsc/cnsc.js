@@ -7,7 +7,6 @@ var map;
 var trail_layer_defn = {
     user_name: "sparkgeo",
     type: "cartodb",
-    https: true,
     sublayers: [{
         sql: "SELECT * FROM otway_ski_trails_2",
         cartocss: "#layer::blaze {line-width: 14;line-color:#FFFFFF;line-opacity: 0.9;line-join: round;line-cap: round;[floodlit=true]{::case {line-width: 10;line-color:#FFE403;line-opacity: 0.2;}}}#layer {line-width: 2.5; line-opacity: 0.9; [difficulty='black'] {line-color: #000000;[direction = 1]{marker-line-width: 0;marker-opacity: 0.9;marker-type:arrow;marker-placement:line;marker-line-color: #000000;marker-fill: #000000;}}[difficulty='blue'] {line-color: #1F78B4;[direction = 1]{marker-line-width: 0;marker-opacity: 0.9;marker-type:arrow; marker-placement:line;marker-line-color: #1f78b4;marker-fill: #1F78B4;} } [difficulty='green'] {line-color: #33A02C;[direction = 1]{marker-line-width: 0;marker-opacity: 0.9;marker-type:arrow; marker-placement:line;marker-line-color: #33a02c;marker-fill: #33a02c;} }}#layer::labels {text-name: [name];text-face-name: 'Lato Bold';text-min-distance: 200;text-size: 16;text-fill: #ffffff;text-label-position-tolerance: 10;text-halo-radius: 3;text-halo-fill: #ffffff;text-dy: 0;text-allow-overlap: false;text-placement: line;text-placement-type: simple;text-min-padding: 50;[difficulty='green'] {text-halo-fill: #33A02C;}[difficulty='blue'] {text-halo-fill: #1F78B4;}[difficulty='black'] {text-halo-fill: #000000;}}"
@@ -110,7 +109,7 @@ function main() {
     });
 
     map.fitBounds([[53.9727081860345, -122.859095858743], [53.9576281860941, -122.899495685641]]);
-   cartodb.createLayer(map, trail_layer_defn)
+   cartodb.createLayer(map, trail_layer_defn, {https: true})
        .addTo(map)
        .done(function(layer) {
             skiTrails = layer;
